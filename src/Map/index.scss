@@ -1,0 +1,45 @@
+.heatmap {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  .heatmap-container {
+    width: 100%;
+    height: 100%;
+    .marker-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .droplet-wrapper {
+        position: relative;
+        width: 20px;
+        height: 20px;
+        .droplet {
+          width: 100%;
+          height: 100%;
+          border-radius: 80% 0 55% 50% / 55% 0 80% 50%;
+          background-color: #0077cc;
+          transform: rotate(135deg);
+          position: absolute;
+          top: 0;
+          left: 0;
+          z-index: 2;
+          border: 1px solid #ccc;
+          &.left {
+            transform: translate(-5px, -5px) rotate(135deg);
+            z-index: 1;
+          }
+          &.right {
+            transform: translate(5px, -5px) rotate(135deg);
+            z-index: 1;
+          }
+        }
+      }
+      .text {
+        color: #0077cc;
+        font-weight: bold;
+        margin-top: 5px;
+        font-size: 20px;
+      }
+    }
+  }
+}
