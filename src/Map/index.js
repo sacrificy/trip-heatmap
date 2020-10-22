@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import CitySearch from '@/CitySearch';
 import './index.scss';
 import { getMarker, getMarkerIconHtmlStr } from './utils';
@@ -69,18 +69,20 @@ function loadPolylines(map) {
 }
 
 export default function App() {
+  const [mapClass, setMapClass] = useState();
   useEffect(() => {
     (async () => {
       const map = await loadMap();
       await loadPlugins(map);
       await loadMarkerClusterer(map);
       loadPolylines(map);
+      setMapClass(map);
     })();
   }, []);
   return (
     <div className="heatmap">
       <div id="mapContainer" className="heatmap-container" />
-      <CitySearch />
+      <CitySearch mapClass={mapClass} />
     </div>
   );
 }

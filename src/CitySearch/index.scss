@@ -4,3 +4,17 @@
   left: 0;
   width: 100%;
 }
+.my-list{
+  max-height: 40vh;
+  overflow: auto;
+}
+.search-box{
+  display: flex;
+}
+.search-box{
+  color: blue;
+  display: flex;
+  justify-content:center;
+  align-items:center;
+  background-color: #efeff4;
+}
