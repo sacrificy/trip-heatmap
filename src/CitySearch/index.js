@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { SearchBar, List } from 'antd-mobile';
 import './index.scss';
 
@@ -10,6 +11,13 @@ export default function CitySearch(props) {
   const [showList, setShowList] = useState(false);
   const [value, setValue] = useState('');
   const [district, setDistrict] = useState("北京市");
+
+  useEffect(() => {
+    (async function f() {
+      let res = await axios.get('/cityjson') //这里使用搜狐的ip信息查询接口
+      console.log(res.data.toString())
+    })()
+  }, [])
 
   const handleChange = (value) => {
     setValue(value);
@@ -24,6 +32,7 @@ export default function CitySearch(props) {
         // 搜索所有省/直辖市信息
         districtSearch.search(value, function (status, result) {
           // 查询成功时，result即为对应的行政区信息
+          console.log(result)
           if (result.districtList)
             setList(result.districtList)
           setShowList(true)
