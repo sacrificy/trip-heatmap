@@ -9,11 +9,11 @@ export default function App() {
     (async () => {
       const nextMap = await loadMap();
       await loadPlugins(nextMap);
-      await loadMarkers(nextMap);
-      loadDrive(nextMap);
-      setMap(map);
+      // await loadMarkers(nextMap);
+      // loadDrive(nextMap);
+      setMap(nextMap);
     })();
-  }, [map]);
+  }, []);
   const setCityMarkers = () => {
     loadMarkers(map);
   };

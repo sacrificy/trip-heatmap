@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { SearchBar, List } from 'antd-mobile';
 import './index.scss';
+import { loadPlugins, loadMarkers, loadDrive } from '../Map/utils';
 
 const Item = List.Item;
 
@@ -14,35 +15,44 @@ export default function CitySearch(props) {
 
   useEffect(() => {
     (async function f() {
-      let res = await axios.get('/cityjson') //这里使用搜狐的ip信息查询接口
-      console.log(res.data)
+      let res = await axios.get('/city/info?cityId=13')
+      console.log(res)
     })()
   }, [])
 
   const handleChange = (value) => {
     setValue(value);
-    if (value) {
-      window.AMap.plugin('AMap.DistrictSearch', function () {
-        var districtSearch = new window.AMap.DistrictSearch({
-          // 关键字对应的行政区级别，country表示国家
-          level: 'province',
-          //  显示下级行政区级数，1表示返回下一级行政区
-          subdistrict: 0,
-        });
-        // 搜索所有省/直辖市信息
-        districtSearch.search(value, function (status, result) {
-          // 查询成功时，result即为对应的行政区信息
-          if (result.districtList) setList(result.districtList);
+    const url = `/city/search?key=${value}&size=10`;
+    axios.get(url)
+      .then(function (response) {
+        if (response.list) {
           setShowList(true);
-        });
+          setList(response.list);
+        }
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
       });
-    }
   };
   const handleClickCity = (item) => {
-    map.setCenter(item.center);
-    setDistrict(item.name);
+    let position = new window.AMap.LngLat(item.lon, item.lat);
+    map.setCenter(position);
+    setDistrict(item.cityName);
     handleClear();
-    setCityMarkers();
+    const url = `/city/info?cityId=${item.cityId}`;
+    axios.get(url)
+      .then(function (response) {
+        if (response.poiInfos) {
+          let markerList = response.poiInfos.map(item => getMarker(item))
+          map.add(markerList);
+        }
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    // setCityMarkers();
   };
   const handleClear = () => {
     setShowList(false);
@@ -66,16 +76,35 @@ export default function CitySearch(props) {
         <List className="my-list">
           {list.map((item) => (
             <Item
-              key={item.adcode}
+              key={item.cityId}
               onClick={() => {
                 handleClickCity(item);
               }}
             >
-              {item.name}
+              {item.cityName}
             </Item>
           ))}
         </List>
       )}
     </div>
   );
+}
+
+function getMarker(data) {
+  const { glatPoi, glonPoi } = data;
+  const marker = new window.AMap.Marker({
+    position: [glonPoi, glatPoi],
+    extData: data,
+    content: `
+    <div class="marker-icon">
+      <div class="droplet-wrapper">
+        <div class="droplet" style="background-color: #1890ff"></div>
+      </div>
+      <div class="text" style="color: #1890ff">景点</div>
+    </div>
+  `,
+    anchor: 'center',
+    offset: new window.AMap.Pixel(0, 0),
+  });
+  return marker;
 }
