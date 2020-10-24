@@ -15,7 +15,7 @@ export default function CitySearch(props) {
   useEffect(() => {
     (async function f() {
       let res = await axios.get('/cityjson') //这里使用搜狐的ip信息查询接口
-      console.log(res.data.toString())
+      console.log(res.data)
     })()
   }, [])
 

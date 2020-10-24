@@ -9,7 +9,7 @@ function loadMap() {
       resizeEnable: true,
       center: [116.397428, 39.90923], //中心点坐标
       zoom: 11,
-      mapStyle: 'amap://styles/light',
+      // mapStyle: 'amap://styles/light',
       features: ['bg', 'road'],
     });
     map.on('complete', () => resolve(map));
