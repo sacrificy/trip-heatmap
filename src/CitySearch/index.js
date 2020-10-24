@@ -6,11 +6,11 @@ import './index.scss';
 const Item = List.Item;
 
 export default function CitySearch(props) {
-  const { mapClass } = props
+  const { map, setCityMarkers } = props;
   const [list, setList] = useState([]);
   const [showList, setShowList] = useState(false);
   const [value, setValue] = useState('');
-  const [district, setDistrict] = useState("北京市");
+  const [district, setDistrict] = useState('北京市');
 
   useEffect(() => {
     (async function f() {
@@ -27,46 +27,53 @@ export default function CitySearch(props) {
           // 关键字对应的行政区级别，country表示国家
           level: 'province',
           //  显示下级行政区级数，1表示返回下一级行政区
-          subdistrict: 0
-        })
+          subdistrict: 0,
+        });
         // 搜索所有省/直辖市信息
         districtSearch.search(value, function (status, result) {
           // 查询成功时，result即为对应的行政区信息
-          console.log(result)
-          if (result.districtList)
-            setList(result.districtList)
-          setShowList(true)
-        })
-      })
+          if (result.districtList) setList(result.districtList);
+          setShowList(true);
+        });
+      });
     }
-  }
+  };
   const handleClickCity = (item) => {
-    // const position =  new window.AMap.LngLat(116, 39)
-    mapClass.setCenter(item.center);
+    map.setCenter(item.center);
     setDistrict(item.name);
     handleClear();
-  }
+    setCityMarkers();
+  };
   const handleClear = () => {
     setShowList(false);
     setValue('');
     setList([]);
-  }
+  };
   return (
     <div className="city-search">
       <div className="search-box">
         <div className="search-text">{district}</div>
-        <SearchBar placeholder="查询城市"
+        <SearchBar
+          placeholder="查询城市"
           value={value}
           onChange={handleChange}
           onCancel={handleClear}
           onClear={handleClear}
-          style={{ flexGrow: "1" }}
+          style={{ flexGrow: '1' }}
         />
       </div>
       {showList && (
         <List className="my-list">
           {list.map((item) => (
-            <Item key={item.adcode} onClick={() => { handleClickCity(item) }}>{item.name}</Item>))}
+            <Item
+              key={item.adcode}
+              onClick={() => {
+                handleClickCity(item);
+              }}
+            >
+              {item.name}
+            </Item>
+          ))}
         </List>
       )}
     </div>

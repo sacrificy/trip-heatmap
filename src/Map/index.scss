@@ -9,6 +9,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      z-index: 101;
       .droplet-wrapper {
         position: relative;
         width: 20px;
@@ -17,7 +18,6 @@
           width: 100%;
           height: 100%;
           border-radius: 80% 0 55% 50% / 55% 0 80% 50%;
-          background-color: #0077cc;
           transform: rotate(135deg);
           position: absolute;
           top: 0;
@@ -35,11 +35,20 @@
         }
       }
       .text {
-        color: #0077cc;
         font-weight: bold;
         margin-top: 5px;
         font-size: 20px;
+        line-height: 20px;
       }
+    }
+    .add-button {
+      width: 30px;
+      height: 30px;
+      color: #1890ff;
+      border: 2px solid #1890ff;
+      border-radius: 50%;
+      line-height: 30px;
+      text-align: center;
     }
   }
 }
